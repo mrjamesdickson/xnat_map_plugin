@@ -1,0 +1,10 @@
+<!-- BEGIN xnat-map-plugin templates/screens/topBar/Apps/DataDiscovery/XnatMap.vm -->
+
+<!-- allowGuest: false -->
+<li class="xnat-map-link">
+    <a href="/xnat-map/" data-qa="apps-xnat-map-link">
+        Global XNAT Installations
+    </a>
+</li>
+
+<!-- END xnat-map-plugin templates/screens/topBar/Apps/DataDiscovery/XnatMap.vm -->

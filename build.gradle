@@ -1,0 +1,64 @@
+/*
+ * XNAT Map Plugin
+ * Copyright (c) 2025 XNATWorks.
+ * All rights reserved.
+ *
+ * This software is distributed under the terms described in the LICENSE file.
+ */
+
+group 'org.xnat'
+version '1.0.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+ext {
+    xnatVersion = '1.8.9.1'
+    springVersion = '5.3.27'
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven { url 'https://nrgxnat.jfrog.io/nrgxnat/libs-release' }
+    maven { url 'https://nrgxnat.jfrog.io/nrgxnat/libs-snapshot' }
+    maven { url 'https://nrgxnat.jfrog.io/nrgxnat/ext-release' }
+}
+
+dependencies {
+    compileOnly "org.nrg.xnat:web:${xnatVersion}"
+    compileOnly "org.nrg.xnat:xnat-data-models:${xnatVersion}"
+    compileOnly "org.nrg:framework:${xnatVersion}"
+    compileOnly "org.springframework:spring-web:${springVersion}"
+    compileOnly "org.springframework:spring-webmvc:${springVersion}"
+    compileOnly "javax.servlet:javax.servlet-api:3.1.0"
+    compileOnly "org.slf4j:slf4j-api:1.7.36"
+    compileOnly "com.fasterxml.jackson.core:jackson-databind:2.13.5"
+    compileOnly "io.swagger:swagger-annotations:1.5.20"
+
+    testImplementation "junit:junit:4.13.2"
+    testImplementation "org.mockito:mockito-core:3.12.4"
+}
+
+// UI build tasks
+task installUI(type: Exec) {
+    workingDir 'ui'
+    commandLine 'npm', 'install'
+}
+
+task buildUI(type: Exec) {
+    workingDir 'ui'
+    commandLine 'npm', 'run', 'build'
+}
+
+buildUI.dependsOn installUI
+processResources.dependsOn buildUI
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'XNAT Map Plugin',
+                   'Implementation-Version': version
+    }
+}
